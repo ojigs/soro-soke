@@ -15,8 +15,8 @@ function App() {
   const [room, setRoom] = useState("");
 
   return (
-    <div className="App">
-      <Router>
+    <Router>
+      <div className="App">
         {/* set the routes. There can be more than one route */}
         <Routes>
           <Route
@@ -32,9 +32,8 @@ function App() {
             }
           />
         </Routes>
-      </Router>
-      <Home />
-    </div>
+      </div>
+    </Router>
   );
 }
 

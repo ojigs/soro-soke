@@ -1,7 +1,10 @@
 import styles from "./styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 const Home = ({ username, setUsername, room, setRoom, socket }) => {
+  const navigate = useNavigate();
+
   // handle input and select change
   function handleChange(e) {
     setUsername(e.target.value);
@@ -10,8 +13,11 @@ const Home = ({ username, setUsername, room, setRoom, socket }) => {
   // set up room event with socket.io
   function joinRoom() {
     if (username !== "" && room !== "") {
+      // emit the socket event for join_room
       socket.emit("join_room", { username, room });
     }
+    // redirect to chat page
+    navigate("/chat", { replace: true });
   }
 
   return (
