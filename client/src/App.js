@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 import { useState } from "react";
 
-const socket = io.connect("https://localhost:4000"); //use socket.io to connect with our server running on port 40000
+const socket = io.connect("http://localhost:4000"); //use socket.io to connect with our server running on port 40000
 
 library.add(faMicrophone);
 
