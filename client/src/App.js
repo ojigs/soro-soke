@@ -2,6 +2,7 @@ import "./App.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import Home from "./pages/home";
+import Chat from "./pages/chat";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import io from "socket.io-client";
 import { useState } from "react";
@@ -30,6 +31,10 @@ function App() {
                 socket={socket}
               />
             }
+          />
+          <Route
+            path="/chat"
+            element={<Chat username={username} room={room} socket={socket} />}
           />
         </Routes>
       </div>

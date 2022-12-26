@@ -33,7 +33,7 @@ const Home = ({ username, setUsername, room, setRoom, socket }) => {
           className={styles.input}
           name="room"
           id="room"
-          onChange={handleChange}
+          onChange={(e) => setRoom(e.target.value)}
         >
           <option>--Select room--</option>
           <option value="MongoDB">MongoDB</option>
