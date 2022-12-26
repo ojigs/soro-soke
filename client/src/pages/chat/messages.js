@@ -7,7 +7,6 @@ function Message({ socket }) {
   //   This will run whenever we emit a socket event from our server
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data);
       setMessageReceived((state) => [
         ...state,
         {
@@ -25,7 +24,7 @@ function Message({ socket }) {
   //   function to format date to dd:mm:yyyy format
   function formatDate(timeStamp) {
     const date = new Date(timeStamp);
-    return date.toLocaleDateString();
+    return date.toLocaleString();
   }
 
   return (
@@ -35,7 +34,7 @@ function Message({ socket }) {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span className={styles.msgMeta}>{msg.username}</span>
             <span className={styles.msgMeta}>
-              {formatDate(msg.__createdtime__)}
+              {formatDate(msg.__createdTime__)}
             </span>
           </div>
           <p className={styles.msgText}>{msg.message}</p>
