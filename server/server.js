@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-http = require("http");
+const http = require("http");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { Server } = require("socket.io");
@@ -10,7 +10,7 @@ dotenv.config({ path: "./config/.env" });
 
 const server = http.createServer(app);
 
-const CHAT_BOT = "Chat bot";
+const CHAT_BOT = "ChatBot";
 let chatRoom;
 const allUsers = [];
 
@@ -33,14 +33,14 @@ io.on("connection", (socket) => {
     const __createdTime__ = Date.now();
 
     //   sends message to everyone already in the room that a new user has joined. All except the new user
-    socket.to(room).emit("message", {
+    socket.to(room).emit("receive_message", {
       message: `${username} has joined ${room} room`,
       username: CHAT_BOT,
       __createdTime__,
     });
 
     // welcome new user to the chatroom
-    socket.emit("message", {
+    socket.emit("receive_message", {
       message: `Welcome, ${username}`,
       username: CHAT_BOT,
       __createdTime__,
