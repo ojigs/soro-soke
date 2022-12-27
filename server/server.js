@@ -4,6 +4,8 @@ const http = require("http");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { Server } = require("socket.io");
+const harperSaveMessage = require("./services/harper-save-message");
+const { response } = require("express");
 
 app.use(cors());
 dotenv.config({ path: "./config/.env" });
@@ -53,6 +55,14 @@ io.on("connection", (socket) => {
 
     socket.to(room).emit("chatroom_users", chatRoomUsers);
     socket.emit("chatroom_users", chatRoomUsers);
+
+    socket.on("send_message", (data) => {
+      const { message, username, room, __createdTime__ } = data;
+      io.in(room).emit("receive_message", data); //sends to all users in the room including the sender
+      harperSaveMessage(message, username, room, __createdTime__) //save message in DB using promise
+        .then((response) => console.log(response, "RESPONSE"))
+        .catch((error) => console.log(error, "ERROR"));
+    });
   });
 });
 
