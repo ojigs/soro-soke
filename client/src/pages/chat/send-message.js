@@ -16,7 +16,7 @@ const SendMessage = ({ username, room, socket }) => {
     <div className={styles.sendMessageContainer}>
       <input
         type="text"
-        className="{styles.messageInput"
+        className={styles.messageInput}
         placeholder="Message..."
         onChange={(e) => setMessage(e.target.value)}
         value={message}
