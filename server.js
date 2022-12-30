@@ -5,7 +5,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const harperSaveMessage = require("./services/harper-save-message");
-const { response } = require("express");
 const harperGetMessages = require("./services/harper-get-messages");
 const leaveRoom = require("./utils/leave-room");
 
@@ -85,6 +84,18 @@ io.on("connection", (socket) => {
         __createdtime__,
       });
       console.log(`${username} has left the chat`);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("User disconnected from the chat");
+      const user = allUsers.find((user) => user.id === socket.id);
+      if (user?.username) {
+        allUsers = leaveRoom(socket.id, allUsers);
+        socket.to(chatRoom).emit("chatroom_users", allUsers);
+        socket.to(chatRoom).emit("receive_message", {
+          message: `${user.username} has disconnected from the chat`,
+        });
+      }
     });
   });
 });
