@@ -24,12 +24,15 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+let count = 1;
 
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
+  // logs id of the socket connection to console
+  console.log(`User connected: ${socket.id}`, (() => count++)());
 
   //   listen for the join_room event from the client and connect here
   socket.on("join_room", (data) => {
+    // destructures data received from the join_room event emitted from the client
     const { username, room } = data;
     socket.join(room); //join the user to socket room
 
@@ -42,7 +45,7 @@ io.on("connection", (socket) => {
       __createdtime__,
     });
 
-    // welcome new user to the chatroom
+    // welcome new user to the chatroom. Only new user will see this message
     socket.emit("receive_message", {
       message: `Welcome, ${username}`,
       username: CHAT_BOT,
@@ -52,8 +55,11 @@ io.on("connection", (socket) => {
     // saves new user to room
     chatRoom = room;
     allUsers.push({ id: socket.id, username, room });
+
+    // filter all users in a room
     const chatRoomUsers = allUsers.filter((user) => user.room === room);
 
+    // emit a socket event and send all users in the same room with the connected user
     socket.to(room).emit("chatroom_users", chatRoomUsers);
     socket.emit("chatroom_users", chatRoomUsers);
 
@@ -61,8 +67,8 @@ io.on("connection", (socket) => {
       const { message, username, room, __createdtime__ } = data;
       io.in(room).emit("receive_message", data); //sends to all users in the room including the sender
       harperSaveMessage(message, username, room, __createdtime__) //save message in DB using promise
-        .then((response) => console.log(response, "RESPONSE"))
-        .catch((error) => console.log(error, "ERROR"));
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
     });
 
     harperGetMessages(room)
@@ -99,10 +105,6 @@ io.on("connection", (socket) => {
     });
   });
 });
-
-// app.get("/", (req, res) => {
-//   res.send("Hello");
-// });
 
 server.listen(4000, () => {
   console.log("Server running on port 4000");
